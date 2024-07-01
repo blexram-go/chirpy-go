@@ -62,3 +62,26 @@ func (db *DB) GetUserByEmail(email string) (User, error) {
 	}
 	return User{}, os.ErrNotExist
 }
+
+func (db *DB) UpdateUser(id int, email, password string) (User, error) {
+	dbStructure, err := db.loadDB()
+	if err != nil {
+		return User{}, err
+	}
+
+	user, ok := dbStructure.Users[id]
+	if !ok {
+		return User{}, os.ErrNotExist
+	}
+
+	user.Email = email
+	user.Password = password
+	dbStructure.Users[id] = user
+
+	err = db.writeDB(dbStructure)
+	if err != nil {
+		return User{}, err
+	}
+
+	return user, nil
+}
