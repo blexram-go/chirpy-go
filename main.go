@@ -56,6 +56,8 @@ func main() {
 	mux.HandleFunc("POST /api/users", cfg.handlerUsersCreate)
 	mux.HandleFunc("PUT /api/users", cfg.handlerUsersUpdate)
 	mux.HandleFunc("POST /api/login", cfg.handlerUserLogin)
+	mux.HandleFunc("POST /api/refresh", cfg.handlerRefresh)
+	mux.HandleFunc("POST /api/revoke", cfg.handlerRevoke)
 	mux.HandleFunc("GET /admin/metrics", cfg.handlerMetrics)
 
 	server := &http.Server{
