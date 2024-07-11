@@ -48,17 +48,24 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/app/*", cfg.middlewareMetricsInc(http.StripPrefix("/app", http.FileServer(http.Dir(filePathRoot)))))
+
 	mux.HandleFunc("GET /api/healthz", handlerReadiness)
 	mux.HandleFunc("GET /api/reset", cfg.handlerReset)
+
+	mux.HandleFunc("POST /api/polka/webhooks", cfg.handlerWebhook)
+
 	mux.HandleFunc("GET /api/chirps", cfg.handlerChirpsRetrieve)
 	mux.HandleFunc("GET /api/chirps/{chirpID}", cfg.handlerChirpGet)
 	mux.HandleFunc("POST /api/chirps", cfg.handlerChirpsCreate)
 	mux.HandleFunc("DELETE /api/chirps/{chirpID}", cfg.handlerChirpsDelete)
+
 	mux.HandleFunc("POST /api/users", cfg.handlerUsersCreate)
 	mux.HandleFunc("PUT /api/users", cfg.handlerUsersUpdate)
+
 	mux.HandleFunc("POST /api/login", cfg.handlerUserLogin)
 	mux.HandleFunc("POST /api/refresh", cfg.handlerRefresh)
 	mux.HandleFunc("POST /api/revoke", cfg.handlerRevoke)
+
 	mux.HandleFunc("GET /admin/metrics", cfg.handlerMetrics)
 
 	server := &http.Server{
