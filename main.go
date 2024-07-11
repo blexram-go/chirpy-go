@@ -23,7 +23,7 @@ func main() {
 	godotenv.Load()
 	jwtSecret := os.Getenv("JWT_SECRET")
 	if jwtSecret == "" {
-		log.Fatal("JWT_SECRET environment varilable is not set")
+		log.Fatal("JWT_SECRET environment variable is not set")
 	}
 
 	db, err := database.NewDB("database.json")
@@ -53,6 +53,7 @@ func main() {
 	mux.HandleFunc("GET /api/chirps", cfg.handlerChirpsRetrieve)
 	mux.HandleFunc("GET /api/chirps/{chirpID}", cfg.handlerChirpGet)
 	mux.HandleFunc("POST /api/chirps", cfg.handlerChirpsCreate)
+	mux.HandleFunc("DELETE /api/chirps/{chirpID}", cfg.handlerChirpsDelete)
 	mux.HandleFunc("POST /api/users", cfg.handlerUsersCreate)
 	mux.HandleFunc("PUT /api/users", cfg.handlerUsersUpdate)
 	mux.HandleFunc("POST /api/login", cfg.handlerUserLogin)
