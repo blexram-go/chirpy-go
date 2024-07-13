@@ -17,6 +17,14 @@ func (cfg *apiConfig) handlerWebhook(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	decoder := json.NewDecoder(r.Body)
+	params := parameters{}
+	err := decoder.Decode(&params)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Couldn't decode parameters")
+		return
+	}
+
 	apiKey, err := auth.GetAPIKey(r.Header)
 	if err != nil {
 		respondWithError(w, http.StatusUnauthorized, "Couldn't find API_KEY")
@@ -25,14 +33,6 @@ func (cfg *apiConfig) handlerWebhook(w http.ResponseWriter, r *http.Request) {
 
 	if cfg.ApiKey != apiKey {
 		w.WriteHeader(http.StatusNoContent)
-		return
-	}
-
-	decoder := json.NewDecoder(r.Body)
-	params := parameters{}
-	err = decoder.Decode(&params)
-	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, "Couldn't decode parameters")
 		return
 	}
 
