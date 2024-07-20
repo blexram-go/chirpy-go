@@ -1,2 +1,2 @@
 # chirpy-go
-A social network similar to Twitter
+The rough backend for a social network similar to Twitter
